@@ -1,0 +1,2069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="5v5 Hockey">
+<meta name="theme-color" content="#112244">
+<title>5v5 Hockey · 2025–26</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --dark:#0a1628;--navy:#112244;--surface:#162035;--surf2:#1e2d48;
+  --border:rgba(255,255,255,0.09);--accent:#c8102e;--gold:#ffb81c;
+  --white:#fff;--muted:#7a8fa8;--green:#22c55e;--red:#ef4444;--blue:#3b82f6;
+  --nav-h:64px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Barlow',sans-serif;background:var(--dark);color:var(--white);display:flex;flex-direction:column;}
+
+/* HEADER */
+header{background:linear-gradient(135deg,var(--navy),#0d1f3c);border-bottom:3px solid var(--accent);padding:0 16px;flex-shrink:0;}
+.hdr{display:flex;align-items:center;gap:10px;height:52px;max-width:700px;margin:0 auto;}
+.hdr-icon{width:34px;height:34px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.hdr-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:19px;letter-spacing:.5px;}
+.hdr-title span{color:var(--gold);}
+.hdr-sub{font-size:11px;color:var(--muted);margin-left:auto;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;}
+
+/* SCROLL + PAGES */
+.scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--nav-h)+12px);}
+.page{display:none;padding:16px;max-width:700px;margin:0 auto;}
+.page.active{display:block;}
+
+/* BOTTOM NAV */
+.bottom-nav{height:var(--nav-h);background:var(--navy);border-top:1px solid var(--border);display:flex;flex-shrink:0;}
+.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:10px;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;transition:color .15s;padding:0;}
+.bnav-btn .icon{font-size:20px;line-height:1;}
+.bnav-btn.active{color:var(--accent);}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold);}
+.stat-card.ac::before{background:var(--accent);}
+.stat-card.gr::before{background:var(--green);}
+.stat-card.bl::before{background:var(--blue);}
+.sc-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.sc-val{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;line-height:1;}
+.sc-sub{font-size:11px;color:var(--muted);margin-top:3px;}
+
+/* LABELS */
+.sec-label{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:0 0 10px;}
+
+/* SEARCH */
+.search-wrap{position:relative;margin-bottom:12px;}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2;}
+.search-box{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 12px 11px 38px;color:var(--white);font-family:'Barlow',sans-serif;font-size:15px;transition:border-color .2s;}
+.search-box:focus{outline:none;border-color:var(--accent);}
+.search-box::placeholder{color:var(--muted);}
+
+/* FILTER PILLS */
+.filter-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none;}
+.filter-row::-webkit-scrollbar{display:none;}
+.fpill{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.fpill.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+
+/* PLAYER CARD */
+.player-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:8px;cursor:pointer;transition:background .12s;}
+.player-card:active{background:var(--surf2);}
+.pc-num{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;color:var(--muted);width:28px;flex-shrink:0;text-align:center;}
+.pc-info{flex:1;min-width:0;}
+.pc-name{font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pc-meta{font-size:12px;color:var(--muted);margin-top:3px;}
+.pc-right{text-align:right;flex-shrink:0;}
+.pc-amount{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;}
+.pc-amount.ok{color:var(--green);}
+.pc-amount.owe{color:var(--red);}
+.badge{display:inline-block;padding:2px 7px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;}
+.b-reg{background:rgba(59,130,246,.15);color:#60a5fa;}
+.b-sub{background:rgba(255,184,28,.15);color:var(--gold);}
+.prog-wrap{background:var(--surf2);border-radius:3px;height:4px;margin-top:6px;overflow:hidden;}
+.prog-bar{height:100%;border-radius:3px;}
+.edit-hint{font-size:10px;color:var(--muted);margin-top:4px;font-style:italic;}
+
+/* INLINE GAME PLAYER ROWS */
+.inline-players{display:flex;flex-direction:column;gap:4px;margin-bottom:4px;}
+.inline-player-row{display:flex;align-items:center;gap:8px;}
+.inline-player-row.is-cancelled .inline-player-btn{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.35);color:var(--red);}
+.inline-player-btn{
+  display:flex;align-items:center;gap:7px;flex-shrink:0;
+  padding:8px 12px;border-radius:10px;border:1px solid var(--border);
+  background:var(--surf2);color:var(--white);font-family:'Barlow',sans-serif;
+  font-weight:600;font-size:13px;cursor:pointer;transition:all .12s;
+  min-width:0;text-align:left;
+}
+.inline-player-btn:active{opacity:.75;}
+.ipr-check{color:var(--green);font-size:12px;flex-shrink:0;}
+.ipr-x{color:var(--red);font-size:12px;flex-shrink:0;}
+.ipr-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.inline-sub-select{
+  flex:1;background:var(--dark);border:1px solid rgba(255,184,28,.4);border-radius:8px;
+  padding:7px 8px;color:var(--gold);font-family:'Barlow Condensed',sans-serif;
+  font-size:12px;font-weight:600;cursor:pointer;min-width:0;
+}
+.inline-sub-select:focus{outline:none;}
+.inline-sub-pill{
+  display:inline-block;padding:4px 10px;border-radius:8px;
+  background:rgba(255,184,28,.1);border:1px solid rgba(255,184,28,.25);
+  color:var(--gold);font-size:12px;font-weight:600;font-family:'Barlow Condensed',sans-serif;
+  white-space:nowrap;
+}
+.inline-sub-row{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.inline-remove-sub{
+  padding:4px 10px;border-radius:8px;border:1px solid rgba(239,68,68,.25);
+  background:none;color:var(--red);font-size:12px;cursor:pointer;white-space:nowrap;
+  font-family:'Barlow Condensed',sans-serif;font-weight:600;flex-shrink:0;
+}
+.inline-add-sub-row{display:flex;gap:8px;margin-top:12px;align-items:center;}
+.inline-add-sub-select{
+  flex:1;background:var(--surf2);border:1px solid var(--border);border-radius:8px;
+  padding:9px 10px;color:var(--white);font-family:'Barlow Condensed',sans-serif;
+  font-size:13px;font-weight:600;cursor:pointer;min-width:0;
+}
+.inline-add-sub-select:focus{outline:none;border-color:var(--gold);}
+.inline-add-sub-btn{
+  padding:9px 14px;border-radius:8px;background:var(--gold);border:none;
+  color:var(--dark);font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:13px;cursor:pointer;flex-shrink:0;
+}
+
+.goalie-picker-row{
+  display:flex;align-items:center;gap:8px;padding:8px 0;
+  border-bottom:1px solid var(--border);
+}
+.goalie-picker-row:last-of-type{border-bottom:none;}
+.goalie-picker-label{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;
+  color:var(--green);flex-shrink:0;width:80px;
+}
+.goalie-picker-select{
+  flex:1;background:var(--surf2);border:1px solid rgba(34,197,94,.3);border-radius:8px;
+  padding:8px 10px;color:var(--white);font-family:'Barlow Condensed',sans-serif;
+  font-size:13px;font-weight:600;cursor:pointer;min-width:0;
+}
+.goalie-picker-select:focus{outline:none;border-color:var(--green);}
+
+.game-card.done .gc-head{opacity:.6;}
+.game-card.done{border-color:rgba(255,255,255,.05);}
+.done-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);
+  border-radius:6px;padding:2px 8px;
+  font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;
+  color:var(--green);letter-spacing:.5px;flex-shrink:0;
+}
+.add-game-btn{
+  width:100%;margin-top:8px;padding:14px;
+  background:none;border:2px dashed rgba(255,255,255,.15);
+  border-radius:12px;color:var(--muted);
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:15px;letter-spacing:1px;cursor:pointer;
+  transition:all .2s;
+}
+.add-game-btn:active{background:var(--surface);border-color:var(--accent);color:var(--accent);}
+
+/* GAME CARD */
+.game-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;}
+.gc-head{background:var(--surf2);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;}
+.gc-date{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;}
+.gc-meta{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;font-family:'Barlow Condensed',sans-serif;}
+.gc-arrow{transition:transform .2s;font-size:11px;}
+.gc-arrow.open{transform:rotate(180deg);}
+.gc-body{display:none;padding:14px 16px;}
+.gc-body.open{display:block;}
+.gc-slabel{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-family:'Barlow Condensed',sans-serif;margin-bottom:7px;margin-top:12px;}
+.gc-slabel:first-child{margin-top:0;}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:4px;}
+.chip{padding:4px 10px;border-radius:16px;font-size:12px;font-weight:500;background:var(--surf2);border:1px solid var(--border);}
+.chip.reg{border-color:rgba(59,130,246,.35);color:#93c5fd;}
+.chip.sub{border-color:rgba(255,184,28,.35);color:var(--gold);}
+.chip.cancelled{border-color:rgba(239,68,68,.4);color:var(--red);text-decoration:line-through;opacity:.7;}
+.chip.replaced{border-color:rgba(34,197,94,.35);color:var(--green);}
+.gc-edit-btn{
+  width:100%;margin-top:12px;background:none;border:1px dashed var(--border);
+  border-radius:10px;padding:10px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;
+  font-weight:600;font-size:13px;letter-spacing:1px;cursor:pointer;transition:all .15s;
+}
+.gc-edit-btn:active{background:var(--surf2);}
+.cancel-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);
+  border-radius:6px;padding:2px 7px;font-size:11px;color:var(--red);
+  font-family:'Barlow Condensed',sans-serif;font-weight:600;
+}
+.sub-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(255,184,28,.1);border:1px solid rgba(255,184,28,.25);
+  border-radius:6px;padding:2px 7px;font-size:11px;color:var(--gold);
+  font-family:'Barlow Condensed',sans-serif;font-weight:600;
+}
+
+/* TEAMS PAGE */
+.teams-controls{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.teams-ctrl-btn{
+  flex:1;min-width:100px;padding:11px 14px;border-radius:10px;border:1px solid var(--border);
+  background:var(--surface);color:var(--white);font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;font-size:13px;letter-spacing:.5px;cursor:pointer;transition:all .15s;
+}
+.teams-ctrl-btn.primary{background:var(--accent);border-color:var(--accent);}
+.teams-ctrl-btn:active{opacity:.8;}
+.teams-present-box{background:var(--surf2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px;}
+.teams-present-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.present-player{
+  display:inline-flex;align-items:center;
+  margin:3px;border-radius:8px;overflow:hidden;
+  background:var(--surface);border:1px solid var(--border);
+  font-size:13px;font-weight:500;cursor:pointer;transition:all .12s;user-select:none;
+}
+.present-player.selected{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4);}
+.pp-name{padding:7px 12px;color:var(--muted);}
+.present-player.selected .pp-name{color:var(--green);}
+
+/* LINE CARD TABLE */
+.line-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;overflow:hidden;margin-bottom:14px;
+}
+.line-card-header{
+  display:grid;grid-template-columns:56px 1fr 1fr;
+  background:var(--surf2);border-bottom:2px solid var(--border);
+}
+.lch-cell{
+  padding:9px 6px;font-family:'Barlow Condensed',sans-serif;
+  font-weight:900;font-size:13px;letter-spacing:1px;text-transform:uppercase;
+  text-align:center;
+}
+.lch-cell.dark-hdr{color:#bbb;border-left:1px solid var(--border);}
+.lch-cell.white-hdr{color:#93c5fd;border-left:1px solid var(--border);}
+
+.line-section-label{
+  padding:6px 10px 3px;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;
+  letter-spacing:2px;text-transform:uppercase;
+  background:rgba(255,255,255,.03);
+  border-top:1px solid var(--border);
+  color:var(--muted);
+}
+.line-row{
+  display:grid;grid-template-columns:56px 1fr 1fr;
+  border-top:1px solid var(--border);
+  min-height:38px;
+}
+.lr-label{
+  padding:4px 4px;display:flex;align-items:center;justify-content:center;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;
+  letter-spacing:.5px;color:var(--muted);text-align:center;line-height:1.2;
+  background:rgba(255,255,255,.02);border-right:1px solid var(--border);
+  flex-direction:column;gap:1px;
+}
+.lr-label span{font-size:8px;font-weight:400;opacity:.7;}
+.lr-cell{
+  padding:3px 4px;border-left:1px solid var(--border);
+  display:flex;flex-direction:column;gap:2px;justify-content:center;
+  min-width:0;
+}
+.lr-cell.dark-col{background:rgba(0,0,0,.15);}
+.lr-cell.white-col{background:rgba(59,130,246,.04);}
+
+/* Goalie row — always shown, green accent */
+.goalie-row{
+  display:grid;grid-template-columns:56px 1fr 1fr;
+  border-top:2px solid rgba(34,197,94,.25);
+  background:rgba(34,197,94,.04);
+  min-height:40px;
+}
+.goalie-label{
+  padding:4px;display:flex;align-items:center;justify-content:center;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;
+  letter-spacing:.5px;color:var(--green);text-align:center;
+  background:rgba(34,197,94,.06);border-right:1px solid rgba(34,197,94,.2);
+  flex-direction:column;gap:1px;
+}
+.goalie-label span{font-size:8px;font-weight:400;opacity:.7;}
+.goalie-cell{
+  padding:3px 4px;border-left:1px solid rgba(34,197,94,.15);
+  display:flex;flex-direction:column;gap:2px;justify-content:center;
+  min-width:0;
+}
+
+/* DRAGGABLE PLAYER PILL */
+.lp-pill{
+  display:flex;align-items:center;gap:4px;
+  padding:5px 6px;border-radius:6px;
+  background:var(--surf2);border:1px solid transparent;
+  font-size:11px;font-weight:600;
+  touch-action:none;cursor:grab;
+  transition:opacity .15s,background .1s,border-color .1s;
+  user-select:none;min-width:0;
+}
+.lp-pill:active{cursor:grabbing;}
+.lp-pill.is-dragging{opacity:.3;}
+.lp-pill.drop-target{background:rgba(255,184,28,.12);border-color:rgba(255,184,28,.5);}
+.lp-pill.gk-pill{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.15);}
+.lp-pill.gk-pill .lp-name{color:var(--green);}
+.lp-num{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;color:var(--muted);width:14px;text-align:center;flex-shrink:0;}
+.lp-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;}
+.lp-drag{color:var(--muted);font-size:10px;opacity:.35;flex-shrink:0;}
+
+.drag-ghost{
+  position:fixed;z-index:9999;pointer-events:none;
+  background:var(--navy);border:1px solid var(--gold);border-radius:8px;
+  padding:7px 12px;font-size:12px;font-weight:600;color:var(--white);
+  box-shadow:0 8px 24px rgba(0,0,0,.6);opacity:.92;
+  white-space:nowrap;transform:translate(-50%,-50%);
+}
+.teams-empty{text-align:center;padding:32px 16px;color:var(--muted);font-size:14px;}
+
+.roster-tabs{display:flex;gap:0;margin-bottom:16px;background:var(--surf2);border-radius:10px;padding:3px;}
+.rtab{flex:1;padding:9px;border:none;background:none;border-radius:8px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:.5px;cursor:pointer;transition:all .15s;}
+.rtab.active{background:var(--surface);color:var(--white);}
+.roster-row{
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:8px;
+}
+.roster-num{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;
+  color:var(--muted);width:30px;text-align:center;flex-shrink:0;
+}
+.roster-name{flex:1;font-weight:600;font-size:15px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.roster-actions{display:flex;gap:6px;flex-shrink:0;}
+.roster-edit-btn{
+  padding:6px 12px;border-radius:8px;border:1px solid var(--border);
+  background:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;font-size:12px;cursor:pointer;transition:all .15s;
+}
+.roster-edit-btn:active{background:var(--surf2);}
+.roster-del-btn{
+  padding:6px 10px;border-radius:8px;border:1px solid rgba(239,68,68,.25);
+  background:rgba(239,68,68,.08);color:var(--red);font-size:14px;cursor:pointer;
+}
+.add-player-row{
+  display:flex;gap:8px;align-items:stretch;margin-bottom:16px;
+}
+.add-player-row input{
+  flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:11px 14px;color:var(--white);font-family:'Barlow',sans-serif;font-size:15px;
+  transition:border-color .2s;min-width:0;
+}
+.add-player-row input:focus{outline:none;border-color:var(--accent);}
+.add-player-row input::placeholder{color:var(--muted);}
+.add-player-row .num-input{width:60px;flex:none;text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:18px;}
+.add-player-btn{
+  padding:11px 16px;background:var(--accent);border:none;border-radius:10px;
+  color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;
+  cursor:pointer;white-space:nowrap;flex-shrink:0;
+}
+.add-player-btn:active{opacity:.85;}
+
+/* ROSTER EDIT MODAL */
+.redit-field{margin-bottom:14px;}
+.redit-field label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;text-transform:uppercase;}
+.redit-field input{
+  width:100%;background:var(--surf2);border:1px solid var(--border);border-radius:10px;
+  padding:13px 14px;color:var(--white);font-family:'Barlow',sans-serif;font-size:16px;
+  transition:border-color .2s;
+}
+.redit-field input:focus{outline:none;border-color:var(--accent);}
+
+/* GAME EDIT MODAL */
+.gm-section{margin-bottom:16px;}
+.gm-section-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.gm-player-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 12px;border-radius:10px;margin-bottom:4px;
+  background:var(--surf2);border:1px solid var(--border);
+  gap:8px;
+}
+.gm-player-row.is-cancelled{background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);}
+.gm-pname{font-size:14px;font-weight:600;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.gm-pname.cancelled-text{color:var(--red);text-decoration:line-through;opacity:.8;}
+.gm-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.cancel-toggle{
+  padding:5px 10px;border-radius:8px;border:1px solid var(--border);
+  background:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;
+  font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.cancel-toggle.active{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.4);color:var(--red);}
+.sub-select{
+  background:var(--dark);border:1px solid var(--border);border-radius:8px;
+  padding:5px 8px;color:var(--gold);font-family:'Barlow Condensed',sans-serif;
+  font-size:12px;font-weight:600;max-width:130px;cursor:pointer;
+}
+.sub-select:focus{outline:none;border-color:var(--gold);}
+.sub-add-row{
+  display:flex;align-items:center;gap:8px;padding:10px 12px;
+  border-radius:10px;border:1px dashed var(--border);margin-bottom:4px;
+}
+.sub-add-select{
+  flex:1;background:var(--surf2);border:1px solid var(--border);border-radius:8px;
+  padding:8px 10px;color:var(--white);font-family:'Barlow Condensed',sans-serif;
+  font-size:13px;font-weight:600;cursor:pointer;
+}
+.sub-add-select:focus{outline:none;border-color:var(--gold);}
+.sub-add-btn{
+  padding:8px 12px;border-radius:8px;background:var(--gold);border:none;
+  color:var(--dark);font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:13px;cursor:pointer;white-space:nowrap;
+}
+.sub-assigned-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 12px;border-radius:10px;margin-bottom:4px;
+  background:rgba(255,184,28,.07);border:1px solid rgba(255,184,28,.2);
+}
+.sub-remove-btn{
+  background:none;border:none;color:var(--red);font-size:16px;
+  cursor:pointer;padding:2px 6px;line-height:1;
+}
+
+/* SETTINGS PAGE */
+.settings-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:14px;}
+.settings-card h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
+.field{margin-bottom:16px;}
+.field:last-child{margin-bottom:0;}
+.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;text-transform:uppercase;font-size:11px;}
+.field input[type=number],.field input[type=text]{
+  width:100%;background:var(--surf2);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;color:var(--white);
+  font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;
+  transition:border-color .2s;
+}
+.field input:focus{outline:none;border-color:var(--accent);}
+.field .hint{font-size:11px;color:var(--muted);margin-top:5px;}
+.save-btn{
+  width:100%;background:var(--accent);border:none;border-radius:12px;
+  padding:15px;color:#fff;font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;font-size:16px;letter-spacing:1px;text-transform:uppercase;
+  cursor:pointer;transition:opacity .15s;margin-top:4px;
+}
+.save-btn:active{opacity:.8;}
+.save-banner{
+  background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);
+  border-radius:10px;padding:10px 14px;color:var(--green);
+  font-size:14px;text-align:center;margin-bottom:14px;display:none;
+}
+
+.credit-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:14px 16px;margin-bottom:8px;
+}
+.credit-card.settled{opacity:.5;}
+.credit-card-top{display:flex;align-items:center;gap:12px;}
+.credit-name{flex:1;font-weight:600;font-size:15px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.credit-amount{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;
+  color:var(--gold);flex-shrink:0;
+}
+.credit-amount.settled-amt{color:var(--green);}
+.credit-detail{font-size:12px;color:var(--muted);margin-top:4px;}
+.credit-actions{display:flex;gap:8px;margin-top:10px;}
+.credit-settle-btn{
+  flex:1;padding:8px 12px;border-radius:8px;
+  background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);
+  color:var(--green);font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;font-size:13px;cursor:pointer;transition:all .15s;
+}
+.credit-settle-btn:active{background:rgba(34,197,94,.25);}
+.credit-settle-btn.undo{
+  background:rgba(255,255,255,.05);border-color:var(--border);
+  color:var(--muted);
+}
+.credit-partial-wrap{display:flex;align-items:center;gap:8px;flex:2;}
+.credit-partial-input{
+  flex:1;background:var(--surf2);border:1px solid var(--border);border-radius:8px;
+  padding:7px 10px;color:var(--white);font-family:'Barlow Condensed',sans-serif;
+  font-size:15px;font-weight:700;min-width:0;
+}
+.credit-partial-input:focus{outline:none;border-color:var(--gold);}
+.credit-apply-btn{
+  padding:8px 12px;border-radius:8px;
+  background:rgba(255,184,28,.15);border:1px solid rgba(255,184,28,.3);
+  color:var(--gold);font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;
+}
+.credit-apply-btn:active{background:rgba(255,184,28,.3);}
+.credit-prog-wrap{background:var(--surf2);border-radius:3px;height:4px;margin-top:8px;overflow:hidden;}
+.credit-prog{height:100%;border-radius:3px;background:var(--green);}
+
+/* CANCELLATIONS */
+.cancel-stat-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px;
+}
+.cancel-stat{
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:14px;position:relative;overflow:hidden;
+}
+.cancel-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.cancel-stat.red::before{background:var(--accent);}
+.cancel-stat.gold::before{background:var(--gold);}
+.cs-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.cs-val{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;line-height:1;}
+
+.cancel-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;
+}
+.cancel-card.highlight{border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.04);}
+.cc-rank{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;
+  color:var(--muted);width:24px;text-align:center;flex-shrink:0;
+}
+.cc-rank.top{color:var(--accent);}
+.cc-info{flex:1;min-width:0;}
+.cc-name{font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cc-games{font-size:12px;color:var(--muted);margin-top:2px;}
+.cc-bar-wrap{background:var(--surf2);border-radius:3px;height:4px;margin-top:6px;overflow:hidden;}
+.cc-bar{height:100%;border-radius:3px;background:var(--accent);}
+.cc-right{text-align:right;flex-shrink:0;}
+.cc-count{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;
+  color:var(--accent);line-height:1;
+}
+.cc-owe{font-size:12px;color:var(--muted);margin-top:3px;}
+.cc-owe.has-owe{color:var(--gold);font-weight:600;}
+.cc-zero{color:var(--green);opacity:.5;}
+
+/* FINANCE */
+.acct-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;}
+.acct-card h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.acct-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px;}
+.acct-row:last-child{border-bottom:none;}
+.acct-total{font-weight:700;font-size:16px;color:var(--gold);border-bottom:none;padding-top:12px;border-top:1px solid rgba(255,184,28,.2);}
+.balance-row{font-weight:700;font-size:18px;color:var(--green);border-top:1px solid rgba(34,197,94,.2);padding-top:14px;border-bottom:none;}
+
+/* MODAL */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;
+  display:none;align-items:flex-end;justify-content:center;
+  padding:16px;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--surface);border:1px solid var(--border);border-radius:20px 20px 16px 16px;
+  padding:24px 20px 32px;width:100%;max-width:500px;
+  animation:slideUp .25s ease;
+}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;margin-bottom:4px;}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+.modal-field{margin-bottom:16px;}
+.modal-field label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;text-transform:uppercase;}
+.modal-field input{
+  width:100%;background:var(--surf2);border:1px solid var(--border);
+  border-radius:10px;padding:14px;color:var(--white);
+  font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:700;
+  transition:border-color .2s;
+}
+.modal-field input:focus{outline:none;border-color:var(--accent);}
+.modal-computed{
+  background:var(--surf2);border-radius:10px;padding:12px 14px;
+  margin-bottom:20px;font-size:13px;color:var(--muted);
+}
+.modal-computed strong{color:var(--white);font-size:15px;}
+.modal-btns{display:flex;gap:10px;}
+.modal-cancel{flex:1;background:var(--surf2);border:1px solid var(--border);border-radius:12px;padding:14px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;cursor:pointer;}
+.modal-save{flex:2;background:var(--accent);border:none;border-radius:12px;padding:14px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:.5px;cursor:pointer;}
+.modal-save:active{opacity:.85;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <div class="hdr-icon">🏒</div>
+    <div class="hdr-title">5<span>v</span>5 HOCKEY</div>
+    <div class="hdr-sub">2025–26</div>
+  </div>
+</header>
+
+<div class="scroll-area">
+
+  <!-- DASHBOARD -->
+  <div id="pg-dash" class="page">
+    <div class="stats-grid" id="stats-grid"></div>
+    <div class="sec-label">All Players — tap to edit payment</div>
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-box" type="search" placeholder="Search player…" oninput="doSearch(this.value,'dash')">
+    </div>
+    <div id="dash-list"></div>
+  </div>
+
+  <!-- PAYMENTS -->
+  <!-- PAY (3 tabs) -->
+  <div id="pg-pay" class="page">
+    <div class="roster-tabs" style="margin-bottom:14px;">
+      <button class="rtab active" onclick="switchPayTab('reg',this)">Regulars</button>
+      <button class="rtab" onclick="switchPayTab('sub',this)">Subs</button>
+      <button class="rtab" onclick="switchPayTab('cancel',this)">❌ Credits</button>
+    </div>
+
+    <!-- REGULARS -->
+    <div id="pay-sub-reg">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-box" type="search" placeholder="Search regular…" oninput="doSearch(this.value,'pay')">
+      </div>
+      <div id="pay-list-reg"></div>
+    </div>
+
+    <!-- SUBS -->
+    <div id="pay-sub-sub" style="display:none;">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-box" type="search" placeholder="Search sub…" oninput="doSearch(this.value,'pay')">
+      </div>
+      <div id="pay-list-sub"></div>
+    </div>
+
+    <!-- CANCELLATIONS / CREDITS -->
+    <div id="pay-sub-cancel" style="display:none;">
+      <div class="cancel-summary" id="cancel-summary"></div>
+      <div class="sec-label" style="margin:16px 0 10px">Player Cancellations</div>
+      <div id="cancel-list"></div>
+      <div class="sec-label" style="margin:20px 0 10px">💰 Credits Owed to Players</div>
+      <div id="credit-list"></div>
+    </div>
+  </div>
+
+  <!-- SCHEDULE -->
+  <div id="pg-sched" class="page active">
+    <div class="sec-label" style="margin-bottom:12px">Tap a game to expand</div>
+    <div id="sched-list"></div>
+    <button class="add-game-btn" onclick="addGame()">+ Add Game</button>
+  </div>
+
+  <!-- ROSTER -->
+  <div id="pg-roster" class="page">
+    <div class="roster-tabs">
+      <button class="rtab active" onclick="switchRosterTab('reg',this)">Regulars</button>
+      <button class="rtab" onclick="switchRosterTab('sub',this)">Substitutes</button>
+      <button class="rtab" onclick="switchRosterTab('gk',this)">Goalies</button>
+    </div>
+
+    <!-- ADD ROW -->
+    <div id="roster-add-row" class="add-player-row">
+      <input class="num-input" type="text" id="new-player-num" placeholder="#" maxlength="3">
+      <input type="text" id="new-player-name" placeholder="Player name…" maxlength="30">
+      <button class="add-player-btn" onclick="addPlayer()">+ Add</button>
+    </div>
+
+    <div id="roster-list"></div>
+  </div>
+
+  <!-- TEAMS -->
+  <div id="pg-teams" class="page">
+    <div class="teams-present-box">
+      <div class="teams-present-label">Tap to select who's playing</div>
+      <div id="teams-present-list"></div>
+    </div>
+    <div class="teams-controls">
+      <button class="teams-ctrl-btn primary" onclick="generateTeams()">🎲 Shuffle Teams</button>
+      <button class="teams-ctrl-btn" onclick="clearTeams()">✕ Clear</button>
+    </div>
+    <div id="teams-result"></div>
+  </div>
+
+  <!-- FINANCE -->
+  <div id="pg-fin" class="page">
+    <div id="fin-content"></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="pg-settings" class="page">
+    <div id="save-banner" class="save-banner">✓ Settings saved!</div>
+
+    <div class="settings-card">
+      <h3>⚙️ Season Settings</h3>
+      <div class="field">
+        <label>Total Games in Season</label>
+        <input type="number" id="cfg-games" min="1" max="100" value="14">
+        <div class="hint">Regulars owe: price × games played</div>
+      </div>
+      <div class="field">
+        <label>Price Per Game Per Player ($)</label>
+        <input type="number" id="cfg-price" min="1" max="999" value="27">
+        <div class="hint" id="cfg-hint">Each regular owes $378 total (14 × $27)</div>
+      </div>
+      <button class="save-btn" onclick="saveSettings()">Apply Season Settings</button>
+    </div>
+
+    <div class="settings-card">
+      <h3>💸 Expenses</h3>
+      <div class="field">
+        <label>Arena / Ice Time ($)</label>
+        <input type="number" id="cfg-arena" min="0" value="4956">
+      </div>
+      <div class="field">
+        <label>Referee Fees ($)</label>
+        <input type="number" id="cfg-ref" min="0" value="1260">
+      </div>
+      <div class="field">
+        <label>Goalie ($)</label>
+        <input type="number" id="cfg-goalie" min="0" value="160">
+      </div>
+      <div class="field">
+        <label>Pucks ($)</label>
+        <input type="number" id="cfg-pucks" min="0" value="40">
+      </div>
+      <div class="field">
+        <label>Credits Issued ($)</label>
+        <input type="number" id="cfg-credits" min="0" value="1107">
+      </div>
+      <button class="save-btn" onclick="saveSettings()">Save Expenses</button>
+    </div>
+
+    <div class="settings-card">
+      <h3>💰 Finance Summary</h3>
+      <button class="save-btn" style="background:var(--surf2);color:var(--white);" onclick="goPage('fin',null)">View Finance Report →</button>
+    </div>
+
+    <div class="settings-card" style="border-color:rgba(239,68,46,.25);">
+      <h3 style="color:var(--accent);">🔄 New Season Reset</h3>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.5;">Clears all payments, game schedules, cancellations and credits. Keeps your roster intact.</p>
+      <button class="save-btn" style="background:var(--accent);" onclick="openSeasonReset()">Start New Season…</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- SEASON RESET MODAL -->
+<div class="modal-overlay" id="reset-modal" onclick="closeResetModal(event)">
+  <div class="modal" onclick="event.stopPropagation()" style="padding-bottom:28px;">
+    <div class="modal-title" style="color:var(--accent);">🔄 New Season</div>
+    <div class="modal-sub" style="margin-bottom:20px;line-height:1.5;">This will reset all payments, games, cancellations and credits. Your roster stays the same.</div>
+    <div class="modal-field">
+      <label>How many games this season?</label>
+      <input type="number" id="reset-num-games" min="1" max="60" placeholder="e.g. 15" style="font-size:24px;font-family:'Barlow Condensed',sans-serif;font-weight:700;">
+    </div>
+    <div class="modal-field">
+      <label>Price per game per player ($)</label>
+      <input type="number" id="reset-price" min="1" max="999" placeholder="e.g. 27" style="font-size:24px;font-family:'Barlow Condensed',sans-serif;font-weight:700;">
+    </div>
+    <div id="reset-preview" style="background:var(--surf2);border-radius:10px;padding:12px 14px;margin-bottom:20px;font-size:13px;color:var(--muted);min-height:42px;"></div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeResetModal()">Cancel</button>
+      <button class="modal-save" style="background:var(--accent);" onclick="confirmSeasonReset()">Reset Season</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="bnav-btn active" onclick="goPage('sched',this)"><span class="icon">📅</span>Schedule</button>
+  <button class="bnav-btn" onclick="goPage('teams',this)"><span class="icon">🏒</span>Teams</button>
+  <button class="bnav-btn" onclick="goPage('roster',this)"><span class="icon">👥</span>Roster</button>
+  <button class="bnav-btn" onclick="goPage('pay',this)"><span class="icon">💳</span>Pay</button>
+  <button class="bnav-btn" onclick="goPage('dash',this)"><span class="icon">📊</span>Stats</button>
+  <button class="bnav-btn" onclick="goPage('settings',this)"><span class="icon">⚙️</span>Settings</button>
+</nav>
+
+<!-- DATE EDIT MODAL -->
+<div class="modal-overlay" id="date-modal" onclick="closeDateModal(event)">
+  <div class="modal" onclick="event.stopPropagation()" style="padding-bottom:28px;">
+    <div class="modal-title" id="dm-title">Edit Date</div>
+    <div class="modal-sub" style="margin-bottom:20px;" id="dm-sub">Pick a date for this game</div>
+    <div class="modal-field">
+      <label>Game Date</label>
+      <input type="date" id="dm-date" style="font-size:18px;font-family:'Barlow Condensed',sans-serif;font-weight:700;color-scheme:dark;">
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeDateModal()">Cancel</button>
+      <button class="modal-save" onclick="saveDateEdit()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ROSTER EDIT MODAL -->
+<div class="modal-overlay" id="roster-modal" onclick="closeRosterModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title" id="rm-title">Edit Player</div>
+    <div class="modal-sub" id="rm-sub" style="margin-bottom:18px;"></div>
+    <div class="redit-field">
+      <label>Jersey # / Label</label>
+      <input type="text" id="rm-num" maxlength="5" placeholder="e.g. 7 or SUB">
+    </div>
+    <div class="redit-field">
+      <label>Full Name</label>
+      <input type="text" id="rm-name" maxlength="40" placeholder="Player name">
+    </div>
+    <div style="margin-bottom:16px;">
+      <button onclick="deletePlayer()" style="width:100%;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:10px;padding:12px;color:var(--red);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;cursor:pointer;letter-spacing:.5px;">
+        🗑 Remove Player
+      </button>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeRosterModal()">Cancel</button>
+      <button class="modal-save" onclick="saveRosterEdit()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title" id="modal-name"></div>
+    <div class="modal-sub" id="modal-sub"></div>
+    <div class="modal-field">
+      <label id="modal-games-label">Games Played This Season</label>
+      <input type="number" id="modal-games" min="0" oninput="updateModalCalc()">
+    </div>
+    <div class="modal-field">
+      <label>Amount Paid ($)</label>
+      <input type="number" id="modal-paid" min="0" oninput="updateModalCalc()">
+    </div>
+    <div class="modal-computed" id="modal-computed"></div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-save" onclick="savePlayer()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── SEASON CONFIG ────────────────────────────────────────────────────────────
+let CFG = { games: 14, price: 27, arena: 4956, ref: 1260, goalie: 160, pucks: 40, credits: 1107 };
+
+// ── BASE PLAYER DATA (games played, paid amount) ─────────────────────────────
+// owes and missing computed live from CFG
+let PLAYERS = [
+  {id:0, num:1,  name:'ANTHONY GRECO',     gamesPlayed:14, paid:0,   type:'reg'},
+  {id:1, num:2,  name:'JESSE BIDDAU',       gamesPlayed:14, paid:378, type:'reg'},
+  {id:2, num:3,  name:'CHRIS RENDA',        gamesPlayed:14, paid:378, type:'reg'},
+  {id:3, num:4,  name:'MIKE ROMANI',        gamesPlayed:14, paid:378, type:'reg'},
+  {id:4, num:5,  name:'ANDREW LIVANOS',     gamesPlayed:14, paid:378, type:'reg'},
+  {id:5, num:6,  name:'NICK BENFEITO',      gamesPlayed:14, paid:378, type:'reg'},
+  {id:6, num:7,  name:'TIM RENDA',          gamesPlayed:14, paid:378, type:'reg'},
+  {id:7, num:8,  name:'GIANMARCO AIELLO',   gamesPlayed:14, paid:378, type:'reg'},
+  {id:8, num:9,  name:'DANIEL ROMANI',      gamesPlayed:14, paid:378, type:'reg'},
+  {id:9, num:10, name:'DUMEIGNIL',          gamesPlayed:14, paid:378, type:'reg'},
+  {id:10,num:11, name:'JOEY ZAPPAVIGNA',    gamesPlayed:14, paid:378, type:'reg'},
+  {id:11,num:12, name:'ANDREW STARINIERI',  gamesPlayed:14, paid:378, type:'reg'},
+  {id:12,num:13, name:'ALEX TREMBLAY',      gamesPlayed:14, paid:378, type:'reg'},
+  {id:13,num:14, name:'MANUEL ROBERT',      gamesPlayed:14, paid:378, type:'reg'},
+  {id:14,num:15, name:'CHRIS GRAY',         gamesPlayed:14, paid:378, type:'reg'},
+  {id:15,num:16, name:'DAVE SANELLI',       gamesPlayed:14, paid:378, type:'reg'},
+  {id:16,num:17, name:'XAVIER',             gamesPlayed:11, paid:297, type:'reg'},
+  {id:17,num:18, name:'PAT AMENDOLA',       gamesPlayed:14, paid:378, type:'reg'},
+  {id:18,num:19, name:'DAN',                gamesPlayed:14, paid:378, type:'reg'},
+  {id:19,num:20, name:'ZACH',               gamesPlayed:14, paid:378, type:'reg'},
+  // Subs — gamesPlayed = number of sub appearances
+  {id:20,num:'SUB',name:'BERTUCCI',         gamesPlayed:12, paid:324, type:'sub'},
+  {id:21,num:'SUB',name:'JEAN JOSEPH',      gamesPlayed:7,  paid:162, type:'sub'},
+  {id:22,num:'SUB',name:'CORDEIRO',         gamesPlayed:6,  paid:135, type:'sub'},
+  {id:23,num:'SUB',name:'M. BENFEITO',      gamesPlayed:4,  paid:108, type:'sub'},
+  {id:24,num:'SUB',name:'DORMAN',           gamesPlayed:3,  paid:81,  type:'sub'},
+  {id:25,num:'SUB',name:'DOMENIC',          gamesPlayed:2,  paid:54,  type:'sub'},
+  {id:26,num:'SUB',name:'HARKNESS',         gamesPlayed:2,  paid:54,  type:'sub'},
+  {id:27,num:'SUB',name:'MARIO',            gamesPlayed:1,  paid:27,  type:'sub'},
+  {id:28,num:'SUB',name:'MARCEAU',          gamesPlayed:1,  paid:27,  type:'sub'},
+  {id:29,num:'SUB',name:'FLORES',           gamesPlayed:1,  paid:27,  type:'sub'},
+  {id:30,num:'SUB',name:'VOGL',             gamesPlayed:1,  paid:27,  type:'sub'},
+  {id:31,num:'SUB',name:'MUIR',             gamesPlayed:1,  paid:27,  type:'sub'},
+  {id:32,num:'SUB',name:'PERRAS',           gamesPlayed:1,  paid:27,  type:'sub'},
+  {id:33,num:'SUB',name:'ROBITAILLE',       gamesPlayed:1,  paid:27,  type:'sub'},
+  {id:34,num:'SUB',name:'DANIEL G.',        gamesPlayed:1,  paid:27,  type:'sub'},
+  {id:35,num:'SUB',name:'LEMOND',           gamesPlayed:1,  paid:27,  type:'sub'},
+  {id:36,num:'SUB',name:'REMY',             gamesPlayed:1,  paid:27,  type:'sub'},
+  {id:37,num:'SUB',name:'ROY',              gamesPlayed:1,  paid:27,  type:'sub'},
+  {id:39,num:'GK',name:'GATINEAU',          gamesPlayed:14, paid:0,   type:'gk'},
+  {id:40,num:'GK',name:'GENCO',             gamesPlayed:14, paid:0,   type:'gk'},
+];
+
+const GAMES=[
+  {num:1, date:'2026-01-05',regs:['GRECO','BIDDAU','C. RENDA','M. ROMANI','LIVANOS','N. BENFEITO','T. RENDA','AIELLO','D.ROMANI','DUMEIGNIL','ZAPPAVIGNA','TREMBLAY','ROBERT','GRAY','SANELLI','PASTRE','AMENDOLA','D. PEJAN','Z. PEJAN','STARINIERI'],subs:[]},
+  {num:2, date:'2026-01-12',regs:['GRECO','BIDDAU','C. RENDA','M. ROMANI','LIVANOS','N. BENFEITO','T. RENDA','AIELLO','D.ROMANI','DUMEIGNIL','ZAPPAVIGNA','TREMBLAY','ROBERT','GRAY','SANELLI','PASTRE','AMENDOLA','D. PEJAN','Z. PEJAN','STARINIERI'],subs:[]},
+  {num:3, date:'2026-01-19',regs:['GRECO','BIDDAU','C. RENDA','M. ROMANI','LIVANOS','N. BENFEITO','T. RENDA','AIELLO','D.ROMANI','DUMEIGNIL','ZAPPAVIGNA','TREMBLAY','ROBERT','GRAY','SANELLI','PASTRE','AMENDOLA','D. PEJAN','Z. PEJAN','STARINIERI'],subs:[]},
+  {num:4, date:'2026-01-26',regs:['GRECO','BIDDAU','C. RENDA','M. ROMANI','LIVANOS','N. BENFEITO','T. RENDA','AIELLO','D.ROMANI','DUMEIGNIL','ZAPPAVIGNA','TREMBLAY','ROBERT','GRAY','SANELLI','PASTRE','AMENDOLA','D. PEJAN','Z. PEJAN','STARINIERI'],subs:[]},
+  {num:5, date:'2026-02-02',regs:['GRECO','BIDDAU','C. RENDA','M. ROMANI','LIVANOS','N. BENFEITO','T. RENDA','AIELLO','D.ROMANI','DUMEIGNIL','ZAPPAVIGNA','TREMBLAY','ROBERT','GRAY','SANELLI','PASTRE','AMENDOLA','D. PEJAN','Z. PEJAN','STARINIERI'],subs:[]},
+  {num:6, date:'2026-02-23',regs:['GRECO','BIDDAU','C. RENDA','M. ROMANI','LIVANOS','N. BENFEITO','T. RENDA','AIELLO','D.ROMANI','DUMEIGNIL','ZAPPAVIGNA','TREMBLAY','ROBERT','GRAY','SANELLI','PASTRE','AMENDOLA','D. PEJAN','Z. PEJAN','STARINIERI'],subs:[]},
+  {num:7, date:'2026-03-02',regs:['GRECO','BIDDAU','C. RENDA','M. ROMANI','LIVANOS','N. BENFEITO','T. RENDA','AIELLO','D.ROMANI','DUMEIGNIL','ZAPPAVIGNA','TREMBLAY','ROBERT','GRAY','SANELLI','PASTRE','AMENDOLA','D. PEJAN','Z. PEJAN','STARINIERI'],subs:[]},
+  {num:8, date:'2026-03-09',regs:['GRECO','BIDDAU','C. RENDA','M. ROMANI','LIVANOS','N. BENFEITO','T. RENDA','AIELLO','D.ROMANI','DUMEIGNIL','ZAPPAVIGNA','TREMBLAY','ROBERT','GRAY','SANELLI','PASTRE','AMENDOLA','D. PEJAN','Z. PEJAN','STARINIERI'],subs:[]},
+  {num:9, date:'2026-03-16',regs:['GRECO','BIDDAU','C. RENDA','M. ROMANI','LIVANOS','N. BENFEITO','T. RENDA','AIELLO','D.ROMANI','DUMEIGNIL','ZAPPAVIGNA','TREMBLAY','ROBERT','GRAY','SANELLI','PASTRE','AMENDOLA','D. PEJAN','Z. PEJAN','STARINIERI'],subs:[]},
+  {num:10,date:'2026-03-23',regs:['GRECO','BIDDAU','C. RENDA','M. ROMANI','LIVANOS','N. BENFEITO','T. RENDA','AIELLO','D.ROMANI','DUMEIGNIL','ZAPPAVIGNA','TREMBLAY','ROBERT','GRAY','SANELLI','PASTRE','AMENDOLA','D. PEJAN','Z. PEJAN','STARINIERI'],subs:[]},
+  {num:11,date:'2026-03-30',regs:['GRECO','BIDDAU','C. RENDA','M. ROMANI','LIVANOS','N. BENFEITO','T. RENDA','AIELLO','D.ROMANI','DUMEIGNIL','ZAPPAVIGNA','TREMBLAY','ROBERT','GRAY','SANELLI','PASTRE','AMENDOLA','D. PEJAN','Z. PEJAN','STARINIERI'],subs:[]},
+  {num:12,date:'2026-04-06',regs:['GRECO','BIDDAU','C. RENDA','M. ROMANI','LIVANOS','N. BENFEITO','T. RENDA','AIELLO','D.ROMANI','DUMEIGNIL','ZAPPAVIGNA','TREMBLAY','ROBERT','GRAY','SANELLI','PASTRE','AMENDOLA','D. PEJAN','Z. PEJAN','STARINIERI'],subs:[]},
+  {num:13,date:'2026-04-13',regs:['GRECO','BIDDAU','C. RENDA','M. ROMANI','LIVANOS','N. BENFEITO','T. RENDA','AIELLO','D.ROMANI','DUMEIGNIL','ZAPPAVIGNA','TREMBLAY','ROBERT','GRAY','SANELLI','PASTRE','AMENDOLA','D. PEJAN','Z. PEJAN','STARINIERI'],subs:[]},
+  {num:14,date:'2026-04-20',regs:['GRECO','BIDDAU','C. RENDA','M. ROMANI','LIVANOS','N. BENFEITO','T. RENDA','AIELLO','D.ROMANI','DUMEIGNIL','ZAPPAVIGNA','TREMBLAY','ROBERT','GRAY','SANELLI','PASTRE','AMENDOLA','D. PEJAN','Z. PEJAN','STARINIERI'],subs:[]},
+  {num:15,date:'2026-04-27',regs:['GRECO','BIDDAU','C. RENDA','M. ROMANI','LIVANOS','N. BENFEITO','T. RENDA','AIELLO','D.ROMANI','DUMEIGNIL','ZAPPAVIGNA','TREMBLAY','ROBERT','GRAY','SANELLI','PASTRE','AMENDOLA','D. PEJAN','Z. PEJAN','STARINIERI'],subs:[]},
+];
+
+// ── COMPUTED ──────────────────────────────────────────────────────────────────
+function owes(p){ return p.gamesPlayed * CFG.price; }
+function missing(p){ return Math.max(0, owes(p) - p.paid); }
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+const $=id=>document.getElementById(id);
+const fmt=n=>n===0?'—':'$'+n.toLocaleString();
+let dashQ='', payQ='';
+
+// ── PLAYER CARD HTML ──────────────────────────────────────────────────────────
+function pCard(p){
+  const ow=owes(p), ms=missing(p), pd=p.paid;
+  const pct=ow>0?Math.min(100,Math.round(pd/ow*100)):100;
+  const col=pct===100?'var(--green)':pct>50?'var(--gold)':'var(--red)';
+  return `<div class="player-card" onclick="openModal(${p.id})">
+    <div class="pc-num">${p.num}</div>
+    <div class="pc-info">
+      <div class="pc-name">${p.name}</div>
+      <div class="pc-meta"><span class="badge ${p.type==='reg'?'b-reg':p.type==='gk'?'b-ok':'b-sub'}">${p.type==='reg'?'Regular':p.type==='gk'?'Goalie':'Sub'}</span>&nbsp;${p.type==='sub'?`${p.gamesPlayed} game${p.gamesPlayed!==1?'s':''} subbed`:`${p.gamesPlayed} game${p.gamesPlayed!==1?'s':''}`} · owes ${fmt(ow)}</div>
+      <div class="prog-wrap"><div class="prog-bar" style="width:${pct}%;background:${col}"></div></div>
+    </div>
+    <div class="pc-right">
+      <div class="pc-amount ${ms>0?'owe':'ok'}">${ms>0?'-$'+ms:'✓'}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:3px">${pct}%</div>
+    </div>
+  </div>`;
+}
+
+// ── STATS ─────────────────────────────────────────────────────────────────────
+function renderStats(){
+  const totalPaid=PLAYERS.reduce((s,p)=>s+p.paid,0);
+  const totalOwed=PLAYERS.reduce((s,p)=>s+missing(p),0);
+  const owing=PLAYERS.filter(p=>missing(p)>0).length;
+  const regs=PLAYERS.filter(p=>p.type==='reg');
+  const totalIn=totalPaid;
+  const totalOut=CFG.arena+CFG.ref+CFG.goalie+CFG.pucks+CFG.credits;
+  const bal=totalIn-totalOut;
+  $('stats-grid').innerHTML=`
+    <div class="stat-card bl"><div class="sc-label">Players</div><div class="sc-val">${PLAYERS.length}</div><div class="sc-sub">${regs.length} reg · ${PLAYERS.filter(p=>p.type==='gk').length} gk · ${PLAYERS.filter(p=>p.type==='sub').length} sub</div></div>
+    <div class="stat-card gr"><div class="sc-label">Collected</div><div class="sc-val" style="color:var(--green)">$${totalPaid.toLocaleString()}</div><div class="sc-sub">This season</div></div>
+    <div class="stat-card ac"><div class="sc-label">Outstanding</div><div class="sc-val" style="color:var(--red)">$${totalOwed.toLocaleString()}</div><div class="sc-sub">${owing} player${owing!==1?'s':''}</div></div>
+    <div class="stat-card ${bal>=0?'gr':'ac'}"><div class="sc-label">Balance</div><div class="sc-val" style="color:${bal>=0?'var(--green)':'var(--red)'}">$${Math.abs(bal).toLocaleString()}</div><div class="sc-sub">${CFG.games} games · $${CFG.price}/game</div></div>`;
+}
+
+// ── DASH / PAY ─────────────────────────────────────────────────────────────────
+function doSearch(q, ctx){
+  if(ctx==='dash'){ dashQ=q.toLowerCase(); renderDash(); }
+  else { payQ=q; renderPay(); }
+}
+function renderDash(){
+  let d=[...PLAYERS];
+  if(dashQ)d=d.filter(p=>p.name.toLowerCase().includes(dashQ));
+  $('dash-list').innerHTML=d.length?d.map(pCard).join(''):'<div style="text-align:center;padding:40px;color:var(--muted)">No players found</div>';
+}
+
+// ── SCHEDULE ──────────────────────────────────────────────────────────────────
+const GAME_STATE = {};
+GAMES.forEach(g => {
+  GAME_STATE[g.num] = { cancelled: new Set(), assignedSubs: [], goalies: [null, null] };
+});
+
+// Parse a date string like "January 5th", "Jan 5", "April 27th" into a Date
+function parseGameDate(str){
+  if(!str) return null;
+  // ISO format YYYY-MM-DD — most reliable
+  if(/^\d{4}-\d{2}-\d{2}$/.test(str)){
+    const [y,m,d] = str.split('-').map(Number);
+    return new Date(y, m-1, d);
+  }
+  return null;
+}
+
+// Format ISO date for display: "Mon Jan 5, 2026"
+function fmtDate(iso){
+  const d = parseGameDate(iso);
+  if(!d) return iso || '—';
+  const days  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const months= ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${days[d.getDay()]} ${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+}
+
+function isPast(dateStr){
+  const d = parseGameDate(dateStr);
+  if(!d) return false;
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  return d < today;
+}
+
+// Today's ISO date for defaulting new games and date picker min
+function todayISO(){
+  const t = new Date();
+  return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;
+}
+
+function renderSched(){
+  try {
+    $('sched-list').innerHTML = GAMES.map(g => gameCardHTML(g)).join('');
+  } catch(e) {
+    console.error('renderSched error:', e);
+    $('sched-list').innerHTML = `<div style="color:var(--red);padding:16px">Error rendering schedule: ${e.message}</div>`;
+  }
+}
+
+function gameCardHTML(g){
+  const gs = GAME_STATE[g.num];
+  const done = isPast(g.date);
+  const numCancelled = gs.cancelled.size;
+  const numSubs = gs.assignedSubs.length;
+  const metaParts = [];
+  if(numCancelled) metaParts.push(`<span style="color:var(--red)">${numCancelled} cancelled</span>`);
+  if(numSubs) metaParts.push(`<span style="color:var(--gold)">${numSubs} sub${numSubs!==1?'s':''}</span>`);
+  const gkNames = gs.goalies.filter(Boolean);
+  if(gkNames.length) metaParts.push(`<span style="color:var(--green)">🥅 ${gkNames.join(', ')}</span>`);
+  const metaStr = metaParts.length ? metaParts.join(' · ') : `${g.regs.length} regulars`;
+
+  // Reg rows — each player is a tappable row
+  const regRows = g.regs.map(r => {
+    const isCancelled = gs.cancelled.has(r);
+    const subOptions = PLAYERS.filter(p=>p.type==='sub')
+      .map(p => {
+        const entry = p.name+'|'+r;
+        const sel = gs.assignedSubs.includes(entry) ? 'selected' : '';
+        return `<option value="${p.name}" ${sel}>${p.name}</option>`;
+      }).join('');
+    const currentSub = gs.assignedSubs.find(s=>s.endsWith('|'+r));
+    const subName = currentSub ? currentSub.split('|')[0] : '';
+
+    return `<div class="inline-player-row ${isCancelled?'is-cancelled':''}">
+      <button class="inline-player-btn ${isCancelled?'cancelled':''}" onclick="inlineToggleCancel(${g.num},'${r.replace(/'/g,"\\'")}')">
+        ${isCancelled ? `<span class="ipr-x">✕</span>` : `<span class="ipr-check">✓</span>`}
+        <span class="ipr-name">${r}</span>
+      </button>
+      ${isCancelled ? `<select class="inline-sub-select" onchange="inlineAssignSub(${g.num},'${r.replace(/'/g,"\\'")}',this.value)">
+        <option value="">No replacement</option>
+        ${subOptions}
+      </select>` : (subName ? `<span class="inline-sub-pill">↑ ${subName}</span>` : '')}
+    </div>`;
+  }).join('');
+
+  // Extra subs (not replacing anyone)
+  const extraSubs = gs.assignedSubs.filter(s=>!s.includes('|'));
+  const extraSubRows = extraSubs.map(name => `
+    <div class="inline-sub-row">
+      <span class="inline-sub-pill" style="flex:1">↑ ${name}</span>
+      <button class="inline-remove-sub" onclick="inlineRemoveSub(${g.num},'${name.replace(/'/g,"\\'")}')">× Remove</button>
+    </div>`).join('');
+
+  // Add sub row
+  const subSelectOptions = PLAYERS.filter(p=>p.type==='sub')
+    .map(p=>`<option value="${p.name}">${p.name}</option>`).join('');
+
+  // Goalie pickers — populated from gk roster
+  const gkOptions = PLAYERS.filter(p=>p.type==='gk')
+    .map(p=>`<option value="${p.name}">${p.name}</option>`).join('');
+
+  const gkPicker = (idx) => {
+    const val = gs.goalies[idx] || '';
+    return `<div class="goalie-picker-row">
+      <span class="goalie-picker-label">🥅 Goalie ${idx+1}</span>
+      <select class="goalie-picker-select" onchange="inlineSetGoalie(${g.num},${idx},this.value)">
+        <option value="">— Pick goalie —</option>
+        ${PLAYERS.filter(p=>p.type==='gk').map(p=>`<option value="${p.name}" ${p.name===val?'selected':''}>${p.name}</option>`).join('')}
+      </select>
+      ${val ? `<span class="inline-sub-pill" style="margin-left:4px;background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3);color:var(--green);">${val}</span>` : ''}
+    </div>`;
+  };
+
+  return `<div class="game-card${done?' done':''}">
+    <div class="gc-head" onclick="toggleG(${g.num})">
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <span class="gc-date" id="gc-date-${g.num}">${fmtDate(g.date)}</span>
+      </div>
+      <span class="gc-meta" style="gap:8px;">
+        ${done ? `<span class="done-badge">✓ Done</span>` : `Game ${g.num} · ${metaStr}`}
+        <button onclick="event.stopPropagation();openDateEdit(${g.num})" style="background:none;border:none;color:var(--muted);font-size:15px;cursor:pointer;padding:2px 4px;line-height:1;" title="Edit date">✏️</button>
+        <span class="gc-arrow" id="arr-${g.num}">▼</span>
+      </span>
+    </div>
+    <div class="gc-body" id="gb-${g.num}">
+      <div class="gc-slabel">🥅 Goalies</div>
+      ${gkOptions ? `${gkPicker(0)}${gkPicker(1)}` : `<div style="font-size:13px;color:var(--muted);padding:4px 0 8px;">No goalies in roster yet — add them in Roster → Goalies</div>`}
+      <div class="gc-slabel" style="margin-top:14px;">Regulars — tap to cancel</div>
+      <div class="inline-players">${regRows}</div>
+      ${extraSubRows ? `<div class="gc-slabel" style="margin-top:12px">Extra Subs</div>${extraSubRows}` : ''}
+      <div class="inline-add-sub-row">
+        <select class="inline-add-sub-select" id="add-sub-sel-${g.num}">
+          <option value="">+ Add sub…</option>
+          ${subSelectOptions}
+        </select>
+        <button class="inline-add-sub-btn" onclick="inlineAddSub(${g.num})">Add</button>
+      </div>
+      <button class="gc-edit-btn" style="margin-top:8px;border-color:rgba(255,184,28,.3);color:var(--gold);" onclick="event.stopPropagation();loadGameIntoTeams(${g.num})">🏒 Make Teams for this Game</button>
+    </div>
+  </div>`;
+}
+
+function toggleG(n){
+  const body = $('gb-'+n);
+  const arr  = $('arr-'+n);
+  if(!body||!arr) return;
+  body.classList.toggle('open');
+  arr.classList.toggle('open');
+}
+
+function refreshGameCard(gameNum){
+  const g = GAMES.find(x=>x.num===gameNum);
+  if(!g) return;
+  const bodyEl = $('gb-'+gameNum);
+  if(!bodyEl) { renderSched(); return; }
+  const card = bodyEl.closest('.game-card');
+  if(!card) { renderSched(); return; }
+  const wasOpen = bodyEl.classList.contains('open');
+  card.outerHTML = gameCardHTML(g);
+  if(wasOpen){
+    const newBody = $('gb-'+gameNum);
+    const newArr  = $('arr-'+gameNum);
+    if(newBody) newBody.classList.add('open');
+    if(newArr)  newArr.classList.add('open');
+  }
+}
+
+function inlineSetGoalie(gameNum, idx, name){
+  GAME_STATE[gameNum].goalies[idx] = name || null;
+  saveData();
+  refreshGameCard(gameNum);
+}
+
+// ── ADD GAME ──────────────────────────────────────────────────────────────────
+function addGame(){
+  const nextNum = GAMES.length ? Math.max(...GAMES.map(g=>g.num)) + 1 : 1;
+  const newGame = {
+    num: nextNum,
+    date: todayISO(),
+    regs: [...(GAMES.length ? GAMES[0].regs : [])], // copy regulars from first game
+    subs: [],
+  };
+  GAMES.push(newGame);
+  GAME_STATE[nextNum] = { cancelled: new Set(), assignedSubs: [], goalies: [null, null] };
+  renderSched();
+  // Scroll to bottom and open date edit for the new game
+  setTimeout(() => {
+    const el = document.getElementById('gb-'+nextNum);
+    if(el) el.closest('.game-card').scrollIntoView({ behavior:'smooth', block:'end' });
+    openDateEdit(nextNum);
+  }, 100);
+}
+
+// ── DATE EDITING ──────────────────────────────────────────────────────────────
+let editingDateGame = null;
+function openDateEdit(gameNum){
+  const g = GAMES.find(x=>x.num===gameNum);
+  editingDateGame = gameNum;
+  $('dm-title').textContent = `Game ${g.num}`;
+  $('dm-sub').textContent = `Current: ${fmtDate(g.date)}`;
+  $('dm-date').value = g.date || '';
+  $('date-modal').classList.add('open');
+  setTimeout(()=> $('dm-date').focus(), 200);
+}
+function saveDateEdit(){
+  if(editingDateGame===null) return;
+  const newDate = $('dm-date').value;
+  if(!newDate) return;
+  const g = GAMES.find(x=>x.num===editingDateGame);
+  g.date = newDate;
+  saveData();
+  closeDateModal();
+  refreshGameCard(editingDateGame);
+}
+function closeDateModal(e){
+  if(e && e.target!==$('date-modal')) return;
+  $('date-modal').classList.remove('open');
+  editingDateGame = null;
+}
+
+function inlineToggleCancel(gameNum, regName){
+  const gs = GAME_STATE[gameNum];
+  if(gs.cancelled.has(regName)){
+    gs.cancelled.delete(regName);
+    gs.assignedSubs = gs.assignedSubs.filter(s=>!s.endsWith('|'+regName));
+  } else {
+    gs.cancelled.add(regName);
+  }
+  saveData();
+  refreshGameCard(gameNum);
+}
+
+function inlineAssignSub(gameNum, regName, subName){
+  const gs = GAME_STATE[gameNum];
+  gs.assignedSubs = gs.assignedSubs.filter(s=>!s.endsWith('|'+regName));
+  if(subName) gs.assignedSubs.push(subName+'|'+regName);
+  saveData();
+  refreshGameCard(gameNum);
+}
+
+function inlineAddSub(gameNum){
+  const sel = $('add-sub-sel-'+gameNum);
+  const name = sel.value;
+  if(!name) return;
+  const gs = GAME_STATE[gameNum];
+  if(gs.assignedSubs.some(s=>s===name||s.startsWith(name+'|'))) { sel.value=''; return; }
+  gs.assignedSubs.push(name);
+  saveData();
+  refreshGameCard(gameNum);
+}
+
+function inlineRemoveSub(gameNum, name){
+  const gs = GAME_STATE[gameNum];
+  gs.assignedSubs = gs.assignedSubs.filter(s=>s!==name);
+  saveData();
+  refreshGameCard(gameNum);
+}
+
+// ── ROSTER MANAGEMENT ─────────────────────────────────────────────────────────
+let rosterTab = 'reg'; // 'reg' or 'sub'
+let editingRosterId = null;
+
+function switchRosterTab(tab, el){
+  rosterTab = tab;
+  document.querySelectorAll('.rtab').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  $('new-player-num').placeholder = tab==='reg'?'#':tab==='gk'?'GK':'SUB';
+  $('new-player-num').value = tab==='gk'?'GK':tab==='sub'?'SUB':'';
+  renderRoster();
+}
+
+function renderRoster(){
+  const players = PLAYERS.filter(p=>p.type===rosterTab);
+  const typeLabel = rosterTab==='reg'?'regulars':rosterTab==='gk'?'goalies':'substitutes';
+  if(!players.length){
+    $('roster-list').innerHTML=`<div style="text-align:center;padding:40px;color:var(--muted)">No ${typeLabel} yet.<br>Add one above.</div>`;
+    return;
+  }
+  $('roster-list').innerHTML = players.map(p=>`
+    <div class="roster-row">
+      <div class="roster-num">${p.num}</div>
+      <div class="roster-name">${p.name}</div>
+      <div class="roster-actions">
+        <button class="roster-edit-btn" onclick="openRosterModal(${p.id})">✏️ Edit</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openRosterModal(id){
+  const p = PLAYERS.find(x=>x.id===id);
+  editingRosterId = id;
+  $('rm-title').textContent = p.name;
+  $('rm-sub').textContent = p.type==='reg'?'Regular Player':p.type==='gk'?'Goalie':'Substitute Player';
+  $('rm-num').value = p.num;
+  $('rm-name').value = p.name;
+  $('roster-modal').classList.add('open');
+  setTimeout(()=>$('rm-name').focus(),200);
+}
+
+function saveRosterEdit(){
+  if(editingRosterId===null) return;
+  const p = PLAYERS.find(x=>x.id===editingRosterId);
+  const newName = $('rm-name').value.trim().toUpperCase();
+  const newNum  = $('rm-num').value.trim();
+  if(!newName){ $('rm-name').focus(); return; }
+  const oldName = p.name;
+  p.name = newName;
+  p.num  = newNum || p.num;
+  // Update any game rosters that reference this player by old name
+  if(oldName !== newName){
+    GAMES.forEach(g=>{
+      const ri = g.regs.indexOf(oldName);
+      if(ri!==-1) g.regs[ri]=newName;
+      const si = g.subs.indexOf(oldName);
+      if(si!==-1) g.subs[si]=newName;
+    });
+    // Update game state subs
+    Object.values(GAME_STATE).forEach(gs=>{
+      if(gs.cancelled.has(oldName)){ gs.cancelled.delete(oldName); gs.cancelled.add(newName); }
+      gs.assignedSubs = gs.assignedSubs.map(s=>{
+        if(s===oldName) return newName;
+        if(s.startsWith(oldName+'|')) return newName+'|'+s.split('|')[1];
+        if(s.endsWith('|'+oldName)) return s.split('|')[0]+'|'+newName;
+        return s;
+      });
+    });
+  }
+  $('roster-modal').classList.remove('open');
+  editingRosterId=null;
+  refreshAll();
+  renderRoster();
+}
+
+function deletePlayer(){
+  if(editingRosterId===null) return;
+  if(!confirm('Remove this player? Their payment history will be lost.')) return;
+  PLAYERS = PLAYERS.filter(x=>x.id!==editingRosterId);
+  // Remove from game rosters
+  const p = PLAYERS.find(x=>x.id===editingRosterId); // already removed, use name from modal
+  const name = $('rm-name').value.trim().toUpperCase();
+  GAMES.forEach(g=>{
+    g.regs = g.regs.filter(r=>r!==name);
+    g.subs = g.subs.filter(s=>s!==name);
+  });
+  Object.values(GAME_STATE).forEach(gs=>{
+    gs.cancelled.delete(name);
+    gs.assignedSubs = gs.assignedSubs.filter(s=>!s.startsWith(name+'|')&&!s.endsWith('|'+name)&&s!==name);
+  });
+  $('roster-modal').classList.remove('open');
+  editingRosterId=null;
+  refreshAll();
+  renderRoster();
+}
+
+function addPlayer(){
+  const nameRaw = $('new-player-name').value.trim();
+  const numRaw  = $('new-player-num').value.trim();
+  if(!nameRaw) { $('new-player-name').focus(); return; }
+  const name = nameRaw.toUpperCase();
+  const num  = numRaw || (rosterTab==='sub'?'SUB':rosterTab==='gk'?'GK':String(PLAYERS.filter(p=>p.type==='reg').length+1));
+  const newId = Math.max(...PLAYERS.map(p=>p.id))+1;
+  PLAYERS.push({ id:newId, num, name, gamesPlayed:0, paid:0, type:rosterTab });
+  $('new-player-name').value='';
+  $('new-player-num').value='';
+  refreshAll();
+  renderRoster();
+}
+
+function closeRosterModal(e){
+  if(e && e.target!==$('roster-modal')) return;
+  $('roster-modal').classList.remove('open');
+  editingRosterId=null;
+}
+
+// ── FINANCE ───────────────────────────────────────────────────────────────────
+function renderFin(){
+  const regsPaid=PLAYERS.filter(p=>p.type==='reg').reduce((s,p)=>s+p.paid,0);
+  const subsPaid=PLAYERS.filter(p=>p.type==='sub').reduce((s,p)=>s+p.paid,0);
+  const totalIn=regsPaid+subsPaid;
+  const totalOut=CFG.arena+CFG.ref+CFG.goalie+CFG.pucks+CFG.credits;
+  const bal=totalIn-totalOut;
+  $('fin-content').innerHTML=`
+    <div class="acct-card">
+      <h3>💰 Money In</h3>
+      <div class="acct-row"><span>Regular Players</span><span style="color:var(--green)">$${regsPaid.toLocaleString()}</span></div>
+      <div class="acct-row"><span>Substitute Players</span><span style="color:var(--green)">$${subsPaid.toLocaleString()}</span></div>
+      <div class="acct-row acct-total"><span>Total In</span><span>$${totalIn.toLocaleString()}</span></div>
+    </div>
+    <div class="acct-card">
+      <h3>💸 Money Out</h3>
+      <div class="acct-row"><span>Arena / Ice Time</span><span style="color:var(--red)">$${CFG.arena.toLocaleString()}</span></div>
+      <div class="acct-row"><span>Credits Issued</span><span style="color:var(--red)">$${CFG.credits.toLocaleString()}</span></div>
+      <div class="acct-row"><span>Referees</span><span style="color:var(--red)">$${CFG.ref.toLocaleString()}</span></div>
+      <div class="acct-row"><span>Pucks</span><span style="color:var(--red)">$${CFG.pucks.toLocaleString()}</span></div>
+      <div class="acct-row"><span>Goalie</span><span style="color:var(--red)">$${CFG.goalie.toLocaleString()}</span></div>
+      <div class="acct-row acct-total"><span>Total Out</span><span>$${totalOut.toLocaleString()}</span></div>
+    </div>
+    <div class="acct-card">
+      <h3>📊 Net Balance</h3>
+      <div class="acct-row"><span>Total Collected</span><span>$${totalIn.toLocaleString()}</span></div>
+      <div class="acct-row"><span>Total Expenses</span><span>$${totalOut.toLocaleString()}</span></div>
+      <div class="acct-row balance-row" style="color:${bal>=0?'var(--green)':'var(--red)'}"><span>NET BALANCE</span><span>${bal>=0?'':'−'}$${Math.abs(bal).toLocaleString()} ${bal>=0?'✓':'⚠️'}</span></div>
+    </div>`;
+}
+
+// ── SETTINGS ──────────────────────────────────────────────────────────────────
+function updateHint(){
+  const g=parseInt($('cfg-games').value)||0;
+  const p=parseInt($('cfg-price').value)||0;
+  $('cfg-hint').textContent=`Each regular owes $${(g*p).toLocaleString()} total (${g} × $${p})`;
+}
+$('cfg-games').oninput=updateHint;
+$('cfg-price').oninput=updateHint;
+
+function saveSettings(){
+  CFG.games   = parseInt($('cfg-games').value)   || CFG.games;
+  CFG.price   = parseInt($('cfg-price').value)   || CFG.price;
+  CFG.arena   = parseInt($('cfg-arena').value)   || 0;
+  CFG.ref     = parseInt($('cfg-ref').value)     || 0;
+  CFG.goalie  = parseInt($('cfg-goalie').value)  || 0;
+  CFG.pucks   = parseInt($('cfg-pucks').value)   || 0;
+  CFG.credits = parseInt($('cfg-credits').value) || 0;
+  refreshAll();
+  const banner=$('save-banner');
+  banner.style.display='block';
+  setTimeout(()=>banner.style.display='none',2500);
+}
+
+// ── MODAL (edit player) ────────────────────────────────────────────────────────
+let editingId=null;
+function openModal(id){
+  const p=PLAYERS.find(x=>x.id===id);
+  editingId=id;
+  $('modal-name').textContent=p.name;
+  const isSub = p.type==='sub';
+  $('modal-sub').textContent=`${p.type==='reg'?'Regular':p.type==='gk'?'Goalie':'Sub'} · $${CFG.price}/game`;
+  $('modal-games-label').textContent = isSub ? 'Games Subbed (games they played)' : 'Games Played This Season';
+  $('modal-games').value=p.gamesPlayed;
+  $('modal-paid').value=p.paid;
+  updateModalCalc();
+  $('modal').classList.add('open');
+  setTimeout(()=>$('modal-paid').focus(),200);
+}
+function updateModalCalc(){
+  const g=parseInt($('modal-games').value)||0;
+  const pd=parseInt($('modal-paid').value)||0;
+  const ow=g*CFG.price;
+  const ms=Math.max(0,ow-pd);
+  $('modal-computed').innerHTML=
+    `Owes: <strong>$${ow.toLocaleString()}</strong> &nbsp;·&nbsp; ` +
+    `Paid: <strong>$${pd.toLocaleString()}</strong> &nbsp;·&nbsp; ` +
+    `<strong style="color:${ms>0?'var(--red)':'var(--green)'}">${ms>0?'Still owes $'+ms.toLocaleString():'Fully paid ✓'}</strong>`;
+}
+function closeModal(e){
+  if(e && e.target!==$('modal')) return;
+  $('modal').classList.remove('open');
+  editingId=null;
+}
+function savePlayer(){
+  if(editingId===null)return;
+  const p=PLAYERS.find(x=>x.id===editingId);
+  p.gamesPlayed=Math.max(0,parseInt($('modal-games').value)||0);
+  p.paid=Math.max(0,parseInt($('modal-paid').value)||0);
+  $('modal').classList.remove('open');
+  editingId=null;
+  refreshAll();
+}
+
+// ── TEAMS ─────────────────────────────────────────────────────────────────────
+// presentPlayers: Set of player ids
+let presentPlayers = new Set();
+
+// teamsGenerated: { dark: { fwdL1, fwdL2, defL1, defL2, gk }, white: { ... } }
+// All slots are just ordered arrays — user drags to arrange
+const SLOTS = ['fwdL1','fwdL2','defL1','defL2','gk'];
+const SLOT_LABELS = { fwdL1:'LINE 1', fwdL2:'LINE 2', defL1:'LINE 1', defL2:'LINE 2', gk:'GOALIE' };
+const SLOT_GROUP  = { fwdL1:'fwd', fwdL2:'fwd', defL1:'def', defL2:'def', gk:'gk' };
+
+function emptyTeams(){ return { dark:{fwdL1:[],fwdL2:[],defL1:[],defL2:[],gk:null}, white:{fwdL1:[],fwdL2:[],defL1:[],defL2:[],gk:null} }; }
+let teamsGenerated = emptyTeams();
+
+function renderTeamsPresent(){
+  const all = PLAYERS.filter(p => p.type==='reg'||p.type==='sub'||p.type==='gk');
+  if(!all.length){ $('teams-present-list').innerHTML='<div style="color:var(--muted);font-size:13px">No players yet.</div>'; return; }
+  $('teams-present-list').innerHTML = all.map(p => {
+    const sel = presentPlayers.has(p.id);
+    return `<span class="present-player ${sel?'selected':''}" onclick="togglePresent(${p.id})">
+      <span class="pp-name">${sel?'✓ ':''} ${p.name}</span>
+    </span>`;
+  }).join('');
+}
+
+function togglePresent(id){
+  if(presentPlayers.has(id)) presentPlayers.delete(id);
+  else presentPlayers.add(id);
+  renderTeamsPresent();
+  if(hasTeams()) generateTeams();
+}
+
+function hasTeams(){
+  return SLOTS.some(k=>(teamsGenerated.dark[k]||[]).length||(teamsGenerated.white[k]||[]).length)
+    || teamsGenerated.dark.gk || teamsGenerated.white.gk;
+}
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+function generateTeams(){
+  const selected = PLAYERS.filter(p => presentPlayers.has(p.id));
+  if(!selected.length){
+    $('teams-result').innerHTML=`<div class="teams-empty">Select players above to generate teams.</div>`;
+    return;
+  }
+
+  // Separate goalies (type==='gk') from skaters
+  const gkPool      = shuffle(selected.filter(p => p.type==='gk'));
+  const skaterPool  = shuffle(selected.filter(p => p.type!=='gk'));
+
+  // 1 goalie per team
+  const darkGk  = gkPool[0] || null;
+  const whiteGk = gkPool[1] || null;
+
+  // Alternate skaters: dark gets even indices, white gets odd
+  const dark=[], white=[];
+  skaterPool.forEach((p,i) => (i%2===0 ? dark : white).push(p));
+
+  // Each team: fwdL1[0–2], fwdL2[3–5], defL1[6–7], defL2[8–9]
+  function toLines(arr){
+    return {
+      fwdL1: arr.slice(0,3),
+      fwdL2: arr.slice(3,6),
+      defL1: arr.slice(6,8),
+      defL2: arr.slice(8,10),
+    };
+  }
+
+  const dLines = toLines(dark), wLines = toLines(white);
+  teamsGenerated = {
+    dark:  { ...dLines, gk: darkGk  },
+    white: { ...wLines, gk: whiteGk },
+  };
+  renderTeams();
+}
+
+function pill(p, slot, isGk=false){
+  return `<div class="lp-pill${isGk?' gk-pill':''}" data-id="${p.id}" data-slot="${slot}"
+    ontouchstart="touchStart(event,${p.id},'${slot}')"
+    ontouchmove="touchMove(event)"
+    ontouchend="touchEnd(event)">
+    <span class="lp-num">${p.num}</span>
+    <span class="lp-name">${p.name}</span>
+    <span class="lp-drag">⠿</span>
+  </div>`;
+}
+
+function emptyPill(){
+  return `<div class="lp-pill" style="opacity:.15;pointer-events:none;border:1px dashed rgba(255,255,255,.1);background:none;">
+    <span class="lp-name" style="color:var(--muted);font-size:10px">empty</span>
+  </div>`;
+}
+
+function renderTeams(){
+  const d = teamsGenerated.dark, w = teamsGenerated.white;
+  const hasAny = ['fwdL1','fwdL2','defL1','defL2'].some(k=>(d[k]||[]).length||(w[k]||[]).length) || d.gk || w.gk;
+  if(!hasAny){ $('teams-result').innerHTML=''; return; }
+
+  // Fixed row counts per slot: forwards=3, defence=2
+  const SLOT_SIZE = { fwdL1:3, fwdL2:3, defL1:2, defL2:2 };
+
+  function lineRows(darkArr, whiteArr, slot){
+    const size = SLOT_SIZE[slot];
+    const maxLen = Math.max((darkArr||[]).length, (whiteArr||[]).length, size);
+    if(!maxLen) return '';
+    return Array.from({length:maxLen},(_,i)=>`
+      <div class="line-row">
+        <div class="lr-label">${i===0?SLOT_LABELS[slot]+'<span>'+(SLOT_GROUP[slot]==='fwd'?'OFF':'DEF')+'</span>':''}</div>
+        <div class="lr-cell dark-col">${(darkArr||[])[i] ? pill((darkArr||[])[i],slot) : emptyPill()}</div>
+        <div class="lr-cell white-col">${(whiteArr||[])[i] ? pill((whiteArr||[])[i],slot) : emptyPill()}</div>
+      </div>`).join('');
+  }
+
+  const offRows = lineRows(d.fwdL1,w.fwdL1,'fwdL1') + lineRows(d.fwdL2,w.fwdL2,'fwdL2');
+  const defRows = lineRows(d.defL1,w.defL1,'defL1') + lineRows(d.defL2,w.defL2,'defL2');
+
+  const gkRow = `<div class="goalie-row">
+    <div class="goalie-label">GOALIE<span>GK</span></div>
+    <div class="goalie-cell">${d.gk ? pill(d.gk,'darkGk',true) : emptyPill()}</div>
+    <div class="goalie-cell">${w.gk ? pill(w.gk,'whiteGk',true) : emptyPill()}</div>
+  </div>`;
+
+  $('teams-result').innerHTML = `
+    <div class="line-card">
+      <div class="line-card-header">
+        <div class="lch-cell"></div>
+        <div class="lch-cell dark-hdr">⬛ DARK</div>
+        <div class="lch-cell white-hdr">⬜ WHITE</div>
+      </div>
+      <div class="line-section-label">⚡ OFFENCE</div>
+      ${offRows}
+      <div class="line-section-label">🛡 DEFENCE</div>
+      ${defRows}
+      ${gkRow}
+    </div>
+    <div style="font-size:12px;color:var(--muted);text-align:center;padding:4px 0 8px;">Hold & drag any player to swap them</div>`;
+}
+
+// ── TOUCH DRAG & DROP ─────────────────────────────────────────────────────────
+let dragState = null;
+let ghostEl = null;
+
+function findPlayerTeam(id, slot){
+  if(slot==='darkGk')  return teamsGenerated.dark.gk?.id===id  ? 'dark'  : null;
+  if(slot==='whiteGk') return teamsGenerated.white.gk?.id===id ? 'white' : null;
+  if((teamsGenerated.dark[slot]||[]).find(p=>p.id===id))  return 'dark';
+  if((teamsGenerated.white[slot]||[]).find(p=>p.id===id)) return 'white';
+  return null;
+}
+
+function touchStart(e, id, slot){
+  e.stopPropagation();
+  const touch = e.touches[0];
+  const fromTeam = findPlayerTeam(id, slot);
+  if(!fromTeam) return;
+  dragState = { id, slot, fromTeam, moved:false };
+  ghostEl = document.createElement('div');
+  ghostEl.className = 'drag-ghost';
+  const p = PLAYERS.find(x=>x.id===id);
+  ghostEl.textContent = p ? p.name : '';
+  document.body.appendChild(ghostEl);
+  moveGhost(touch.clientX, touch.clientY);
+  e.currentTarget.classList.add('is-dragging');
+}
+
+function touchMove(e){
+  if(!dragState) return;
+  e.preventDefault();
+  dragState.moved = true;
+  const touch = e.touches[0];
+  moveGhost(touch.clientX, touch.clientY);
+  document.querySelectorAll('.lp-pill').forEach(el=>el.classList.remove('drop-target'));
+  const el = document.elementFromPoint(touch.clientX, touch.clientY);
+  if(el){ const row=el.closest('.lp-pill'); if(row&&row.dataset.id!=dragState.id) row.classList.add('drop-target'); }
+}
+
+function touchEnd(e){
+  if(!dragState){ cleanupDrag(); return; }
+  const touch = e.changedTouches[0];
+  const { id:fromId, slot:fromSlot, fromTeam, moved } = dragState;
+  dragState = null;
+  cleanupDrag();
+  if(!moved) return;
+
+  const el = document.elementFromPoint(touch.clientX, touch.clientY);
+  if(!el) return;
+  const targetPill = el.closest('.lp-pill[data-id]');
+  if(!targetPill || targetPill.dataset.id == fromId) return;
+
+  const toId   = parseInt(targetPill.dataset.id);
+  const toSlot = targetPill.dataset.slot;
+  const toTeam = findPlayerTeam(toId, toSlot);
+  if(!toTeam) return;
+
+  // Handle goalie slots (single player, not array)
+  const isFromGk = fromSlot==='darkGk'||fromSlot==='whiteGk';
+  const isToGk   = toSlot==='darkGk'||toSlot==='whiteGk';
+
+  if(isFromGk && isToGk){
+    // Swap both goalies
+    const tmp = teamsGenerated.dark.gk;
+    teamsGenerated.dark.gk  = teamsGenerated.white.gk;
+    teamsGenerated.white.gk = tmp;
+  } else if(isFromGk){
+    // Swap goalie with a skater
+    const gkTeam   = fromSlot==='darkGk'?'dark':'white';
+    const toArr    = teamsGenerated[toTeam][toSlot];
+    const toIdx    = toArr.findIndex(p=>p.id===toId);
+    const oldGk    = teamsGenerated[gkTeam].gk;
+    teamsGenerated[gkTeam].gk = toArr[toIdx];
+    toArr[toIdx] = oldGk;
+  } else if(isToGk){
+    // Swap skater with goalie
+    const gkTeam   = toSlot==='darkGk'?'dark':'white';
+    const fromArr  = teamsGenerated[fromTeam][fromSlot];
+    const fromIdx  = fromArr.findIndex(p=>p.id===fromId);
+    const oldGk    = teamsGenerated[gkTeam].gk;
+    teamsGenerated[gkTeam].gk = fromArr[fromIdx];
+    fromArr[fromIdx] = oldGk;
+  } else {
+    // Regular swap between two skater slots
+    const fromArr = teamsGenerated[fromTeam][fromSlot];
+    const toArr   = teamsGenerated[toTeam][toSlot];
+    const fromIdx = fromArr.findIndex(p=>p.id===fromId);
+    const toIdx   = toArr.findIndex(p=>p.id===toId);
+    if(fromIdx===-1||toIdx===-1) return;
+    [fromArr[fromIdx], toArr[toIdx]] = [toArr[toIdx], fromArr[fromIdx]];
+  }
+  renderTeams();
+}
+
+function moveGhost(x,y){ if(ghostEl){ ghostEl.style.left=x+'px'; ghostEl.style.top=y+'px'; } }
+function cleanupDrag(){
+  document.querySelectorAll('.is-dragging,.drop-target').forEach(el=>el.classList.remove('is-dragging','drop-target'));
+  if(ghostEl){ ghostEl.remove(); ghostEl=null; }
+}
+
+function loadGameIntoTeams(gameNum){
+  const g  = GAMES.find(x=>x.num===gameNum);
+  const gs = GAME_STATE[gameNum];
+  const playingNames = new Set();
+  g.regs.forEach(r => { if(!gs.cancelled.has(r)) playingNames.add(r.toUpperCase()); });
+  gs.assignedSubs.forEach(s => {
+    const name = s.includes('|') ? s.split('|')[0] : s;
+    playingNames.add(name.toUpperCase());
+  });
+  presentPlayers.clear();
+  PLAYERS.forEach(p => {
+    const pn = p.name.toUpperCase();
+    if(playingNames.has(pn)){ presentPlayers.add(p.id); return; }
+    for(const chip of playingNames){
+      if(pn.includes(chip)||chip.includes(pn)){ presentPlayers.add(p.id); break; }
+    }
+  });
+  // Also add the game's selected goalies
+  gs.goalies.filter(Boolean).forEach(gkName => {
+    const gk = PLAYERS.find(p => p.type==='gk' && p.name===gkName);
+    if(gk) presentPlayers.add(gk.id);
+  });
+  teamsGenerated = emptyTeams();
+  goPage('teams', null);
+  renderTeamsPresent();
+  const banner = document.createElement('div');
+  banner.style.cssText='background:rgba(255,184,28,.12);border:1px solid rgba(255,184,28,.3);border-radius:10px;padding:10px 14px;color:var(--gold);font-size:13px;text-align:center;margin-bottom:14px;';
+  banner.textContent = `✓ Loaded ${presentPlayers.size} players from Game ${g.num} — ${g.date}`;
+  const page = $('pg-teams');
+  const existing = page.querySelector('.game-load-banner');
+  if(existing) existing.remove();
+  banner.className='game-load-banner';
+  page.insertBefore(banner, page.firstChild);
+  generateTeams();
+}
+
+function clearTeams(){
+  presentPlayers.clear();
+  teamsGenerated = emptyTeams();
+  renderTeamsPresent();
+  $('teams-result').innerHTML='';
+  const b=$('pg-teams').querySelector('.game-load-banner');
+  if(b) b.remove();
+}
+
+// ── CANCELLATIONS ─────────────────────────────────────────────────────────────
+// ── PAY PAGE TABS ─────────────────────────────────────────────────────────────
+let payTab = 'reg';
+
+function switchPayTab(tab, el){
+  payTab = tab;
+  document.querySelectorAll('#pg-pay .rtab').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  $('pay-sub-reg').style.display    = tab==='reg'    ? '' : 'none';
+  $('pay-sub-sub').style.display    = tab==='sub'    ? '' : 'none';
+  $('pay-sub-cancel').style.display = tab==='cancel' ? '' : 'none';
+  if(tab==='cancel') renderCancel();
+  else renderPay();
+}
+
+function renderPay(){
+  const q = payQ.toLowerCase();
+  const regs = PLAYERS.filter(p=>p.type==='reg' && (!q || p.name.toLowerCase().includes(q)));
+  const subs = PLAYERS.filter(p=>p.type==='sub' && (!q || p.name.toLowerCase().includes(q)));
+  $('pay-list-reg').innerHTML = regs.length ? regs.map(pCard).join('') : '<div style="text-align:center;padding:32px;color:var(--muted)">No regulars found</div>';
+  $('pay-list-sub').innerHTML = subs.length ? subs.map(pCard).join('') : '<div style="text-align:center;padding:32px;color:var(--muted)">No subs found</div>';
+}
+// creditsPaid: map of playerName → amount already paid back
+const creditsPaid = {};
+
+function renderCancel(){
+  // Build cancellation tally
+  const tally = {};
+  PLAYERS.filter(p=>p.type==='reg').forEach(p=>{
+    tally[p.name] = { player: p, count: 0, games: [] };
+  });
+
+  GAMES.forEach(g => {
+    const gs = GAME_STATE[g.num];
+    if(!gs) return;
+    gs.cancelled.forEach(name => {
+      const key = Object.keys(tally).find(k =>
+        k === name || k.includes(name) || name.includes(k.split(' ').pop())
+      );
+      if(key){
+        tally[key].count++;
+        tally[key].games.push(`Game ${g.num}`);
+      } else {
+        if(!tally[name]) tally[name] = { player:null, count:0, games:[] };
+        tally[name].count++;
+        tally[name].games.push(`Game ${g.num}`);
+      }
+    });
+  });
+
+  const entries = Object.entries(tally)
+    .map(([name, d]) => ({ name, ...d }))
+    .sort((a,b) => b.count - a.count);
+
+  const totalCancels = entries.reduce((s,e)=>s+e.count, 0);
+  const maxCount = entries.length ? entries[0].count : 0;
+  const totalOwed = entries.reduce((s,e)=>s+(e.count * CFG.price), 0);
+  const totalPaidBack = Object.values(creditsPaid).reduce((s,v)=>s+v, 0);
+  const playersWithCancels = entries.filter(e=>e.count>0).length;
+
+  // Summary
+  $('cancel-summary').innerHTML = `
+    <div class="cancel-stat-row">
+      <div class="cancel-stat red">
+        <div class="cs-label">Total Cancels</div>
+        <div class="cs-val" style="color:var(--accent)">${totalCancels}</div>
+      </div>
+      <div class="cancel-stat gold">
+        <div class="cs-label">Credits Owed</div>
+        <div class="cs-val" style="color:var(--gold)">$${(totalOwed-totalPaidBack).toLocaleString()}</div>
+      </div>
+    </div>
+    <div class="cancel-stat-row">
+      <div class="cancel-stat red">
+        <div class="cs-label">Players Cancelled</div>
+        <div class="cs-val">${playersWithCancels}</div>
+      </div>
+      <div class="cancel-stat gold">
+        <div class="cs-label">Paid Back</div>
+        <div class="cs-val" style="color:var(--green);font-size:22px">$${totalPaidBack.toLocaleString()}</div>
+      </div>
+    </div>`;
+
+  // Cancellation list
+  if(!entries.length){
+    $('cancel-list').innerHTML = '<div style="text-align:center;padding:32px;color:var(--muted)">No cancellation data yet</div>';
+    $('credit-list').innerHTML = '';
+    return;
+  }
+
+  $('cancel-list').innerHTML = entries.map((e, i) => {
+    const owed = e.count * CFG.price;
+    const pct = maxCount > 0 ? Math.round(e.count / maxCount * 100) : 0;
+    const isTop = e.count > 0 && e.count === maxCount;
+    return `<div class="cancel-card ${isTop?'highlight':''}">
+      <div class="cc-rank ${isTop?'top':''}">${i+1}</div>
+      <div class="cc-info">
+        <div class="cc-name">${e.name}</div>
+        <div class="cc-games">${e.count > 0 ? e.games.slice(0,3).join(', ')+(e.games.length>3?` +${e.games.length-3} more`:'') : 'No cancellations'}</div>
+        <div class="cc-bar-wrap"><div class="cc-bar" style="width:${pct}%"></div></div>
+      </div>
+      <div class="cc-right">
+        <div class="cc-count ${e.count===0?'cc-zero':''}">${e.count}</div>
+        <div class="cc-owe ${owed>0?'has-owe':''}">${owed>0?'$'+owed:'—'}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Credits section — only show players who have something owed
+  const creditEntries = entries.filter(e => e.count > 0);
+  if(!creditEntries.length){
+    $('credit-list').innerHTML = '<div style="text-align:center;padding:24px;color:var(--muted);font-size:14px">No credits to show — no cancellations recorded yet</div>';
+    return;
+  }
+
+  $('credit-list').innerHTML = creditEntries.map(e => {
+    const totalCredit = e.count * CFG.price;
+    const paid = creditsPaid[e.name] || 0;
+    const remaining = Math.max(0, totalCredit - paid);
+    const pct = totalCredit > 0 ? Math.min(100, Math.round(paid / totalCredit * 100)) : 0;
+    const isSettled = remaining === 0;
+
+    return `<div class="credit-card ${isSettled?'settled':''}">
+      <div class="credit-card-top">
+        <div class="credit-name">${e.name}</div>
+        <div class="credit-amount ${isSettled?'settled-amt':''}">
+          ${isSettled ? '✓ Settled' : '$'+remaining}
+        </div>
+      </div>
+      <div class="credit-detail">
+        ${e.count} cancel${e.count!==1?'s':''} × $${CFG.price} = $${totalCredit} total
+        ${paid > 0 ? ` · $${paid} paid back` : ''}
+      </div>
+      <div class="credit-prog-wrap">
+        <div class="credit-prog" style="width:${pct}%"></div>
+      </div>
+      ${!isSettled ? `
+      <div class="credit-actions">
+        <button class="credit-settle-btn" onclick="settleCredit('${e.name}',${totalCredit})">
+          ✓ Mark Fully Paid
+        </button>
+        <div class="credit-partial-wrap">
+          <input class="credit-partial-input" type="number" id="cp-${e.name.replace(/\s/g,'_')}" placeholder="$" min="0" max="${remaining}">
+          <button class="credit-apply-btn" onclick="applyPartialCredit('${e.name}',${remaining})">Apply</button>
+        </div>
+      </div>` : `
+      <div class="credit-actions">
+        <button class="credit-settle-btn undo" onclick="settleCredit('${e.name}',0)">↩ Undo</button>
+      </div>`}
+    </div>`;
+  }).join('');
+}
+
+function settleCredit(name, amount){
+  creditsPaid[name] = amount;
+  saveData();
+  renderCancel();
+}
+
+function applyPartialCredit(name, remaining){
+  const key = name.replace(/\s/g,'_');
+  const input = document.getElementById('cp-'+key);
+  if(!input) return;
+  const val = Math.max(0, Math.min(remaining, parseFloat(input.value)||0));
+  if(!val) return;
+  creditsPaid[name] = (creditsPaid[name]||0) + val;
+  saveData();
+  renderCancel();
+}
+
+// ── SEASON RESET ──────────────────────────────────────────────────────────────
+function openSeasonReset(){
+  $('reset-num-games').value = '';
+  $('reset-price').value = CFG.price;
+  updateResetPreview();
+  $('reset-modal').classList.add('open');
+  setTimeout(()=>$('reset-num-games').focus(), 200);
+  ['reset-num-games','reset-price'].forEach(id=>{ $(id).oninput = updateResetPreview; });
+}
+
+function updateResetPreview(){
+  const n = parseInt($('reset-num-games').value)||0;
+  const p = parseInt($('reset-price').value)||0;
+  if(!n||!p){ $('reset-preview').textContent=''; return; }
+  const regs = PLAYERS.filter(x=>x.type==='reg').length;
+  $('reset-preview').innerHTML =
+    `<strong style="color:var(--white)">${n} games · $${p}/game · $${n*p} per player</strong><br>` +
+    `${regs} regulars × $${n*p} = $${(regs*n*p).toLocaleString()} total season revenue`;
+}
+
+function confirmSeasonReset(){
+  const n = parseInt($('reset-num-games').value);
+  const p = parseInt($('reset-price').value);
+  if(!n||n<1){ $('reset-num-games').focus(); return; }
+  if(!p||p<1){ $('reset-price').focus(); return; }
+
+  CFG.games = n; CFG.price = p;
+  $('cfg-games').value = n; $('cfg-price').value = p;
+  updateHint();
+
+  // Reset payments — regulars get full season games, subs start at 0
+  PLAYERS.forEach(pl => {
+    pl.paid = 0;
+    pl.gamesPlayed = pl.type === 'reg' ? n : 0;
+  });
+
+  // Rebuild game list
+  GAMES.length = 0;
+  const regNames = PLAYERS.filter(x=>x.type==='reg').map(x=>x.name);
+  for(let i=1; i<=n; i++){
+    GAMES.push({ num:i, date:'', regs:[...regNames], subs:[] });
+  }
+
+  // Rebuild GAME_STATE
+  Object.keys(GAME_STATE).forEach(k=>delete GAME_STATE[k]);
+  GAMES.forEach(g=>{ GAME_STATE[g.num] = { cancelled:new Set(), assignedSubs:[], goalies:[null,null] }; });
+
+  // Clear credits
+  Object.keys(creditsPaid).forEach(k=>delete creditsPaid[k]);
+
+  closeResetModal();
+  refreshAll();
+
+  const banner = $('save-banner');
+  banner.textContent = `✓ New season started! ${n} games · $${p}/game`;
+  banner.style.display = 'block';
+  goPage('sched', null);
+  setTimeout(()=>{ banner.style.display='none'; banner.textContent='✓ Settings saved!'; }, 4000);
+}
+
+function closeResetModal(e){
+  if(e && e.target !== $('reset-modal')) return;
+  $('reset-modal').classList.remove('open');
+}
+
+function refreshAll(){
+  saveData();
+  renderStats();
+  renderDash();
+  renderPay();
+  renderSched();
+  renderRoster();
+  renderFin();
+  renderTeamsPresent();
+  renderCancel();
+}
+
+// ── NAV ───────────────────────────────────────────────────────────────────────
+function goPage(id, el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
+  $('pg-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  if(!el){
+    document.querySelectorAll('.bnav-btn').forEach(b=>{
+      if(b.getAttribute('onclick') && b.getAttribute('onclick').includes("'"+id+"'")) b.classList.add('active');
+    });
+  }
+  // Refresh cancel when navigating to pay page if cancel tab is active
+  if(id==='pay' && payTab==='cancel') renderCancel();
+  document.querySelector('.scroll-area').scrollTop=0;
+}
+
+// ── LOCALSTORAGE PERSISTENCE ──────────────────────────────────────────────────
+const STORAGE_KEY = 'hockey_app_v1';
+
+function saveData(){
+  try {
+    // Serialise GAME_STATE (Sets → arrays)
+    const gsSerial = {};
+    Object.keys(GAME_STATE).forEach(k => {
+      const gs = GAME_STATE[k];
+      gsSerial[k] = {
+        cancelled: [...gs.cancelled],
+        assignedSubs: gs.assignedSubs,
+        goalies: gs.goalies,
+      };
+    });
+    const payload = {
+      CFG: {...CFG},
+      PLAYERS: PLAYERS.map(p=>({...p})),
+      GAMES: GAMES.map(g=>({...g, regs:[...g.regs], subs:[...g.subs]})),
+      GAME_STATE: gsSerial,
+      creditsPaid: {...creditsPaid},
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+  } catch(e){ console.warn('Save failed:', e); }
+}
+
+function loadData(){
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return false;
+    const d = JSON.parse(raw);
+
+    // Restore CFG
+    if(d.CFG) Object.assign(CFG, d.CFG);
+
+    // Restore PLAYERS
+    if(d.PLAYERS && d.PLAYERS.length){
+      PLAYERS.length = 0;
+      d.PLAYERS.forEach(p => PLAYERS.push(p));
+    }
+
+    // Restore GAMES
+    if(d.GAMES && d.GAMES.length){
+      GAMES.length = 0;
+      d.GAMES.forEach(g => GAMES.push(g));
+    }
+
+    // Restore GAME_STATE (arrays → Sets)
+    if(d.GAME_STATE){
+      Object.keys(GAME_STATE).forEach(k=>delete GAME_STATE[k]);
+      Object.keys(d.GAME_STATE).forEach(k => {
+        const gs = d.GAME_STATE[k];
+        GAME_STATE[k] = {
+          cancelled: new Set(gs.cancelled || []),
+          assignedSubs: gs.assignedSubs || [],
+          goalies: gs.goalies || [null, null],
+        };
+      });
+    }
+
+    // Restore credits
+    if(d.creditsPaid){
+      Object.keys(creditsPaid).forEach(k=>delete creditsPaid[k]);
+      Object.assign(creditsPaid, d.creditsPaid);
+    }
+
+    return true;
+  } catch(e){ console.warn('Load failed:', e); return false; }
+}
+
+// Auto-save after any data-mutating action
+function saveAndRefresh(){
+  saveData();
+  refreshAll();
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+window.onerror = function(msg, src, line, col, err){
+  console.error('Global error:', msg, 'line:', line, 'col:', col, err);
+};
+
+// Load saved data (or use defaults already set)
+loadData();
+
+// Sync settings inputs with loaded CFG
+$('cfg-games').value  = CFG.games;
+$('cfg-price').value  = CFG.price;
+$('cfg-arena').value  = CFG.arena;
+$('cfg-ref').value    = CFG.ref;
+$('cfg-goalie').value = CFG.goalie;
+$('cfg-pucks').value  = CFG.pucks;
+$('cfg-credits').value= CFG.credits;
+updateHint();
+
+// Ensure all loaded games have GAME_STATE entries
+GAMES.forEach(g=>{
+  if(!GAME_STATE[g.num]){
+    GAME_STATE[g.num]={ cancelled:new Set(), assignedSubs:[], goalies:[null,null] };
+  }
+});
+
+renderStats();renderDash();renderPay();renderSched();renderRoster();renderFin();renderTeamsPresent();renderCancel();
+</script>
+</body>
+</html>
